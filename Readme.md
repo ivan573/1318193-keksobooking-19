@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ivan Privalov](https://up.htmlacademy.ru/javascript/19/user/1318193).
-* Наставник: `Неизвестно`.
+* Наставник: [Дарья Клюхина](https://htmlacademy.ru/profile/id125399).
 
 ---
 
