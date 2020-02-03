@@ -104,6 +104,6 @@ properties.forEach(function (property) {
   fragment.appendChild(renderPin(property));
 });
 
-var mapPins = document.querySelector('map__pins');
+var mapPins = document.querySelector('.map__pins');
 
 mapPins.appendChild(fragment);
