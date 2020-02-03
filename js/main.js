@@ -1,5 +1,8 @@
 'use strict';
 
+var PIN_WIDTH = 50;
+var PIN_HEIGHT = 70;
+
 var properties = new Array(8);
 
 var authors = {
@@ -84,14 +87,14 @@ for (var i = 0; i < properties.length; i++) {
 }
 
 var adsMap = document.querySelector('.map');
-adsMap.classList.remove('.map--faded');
+adsMap.classList.remove('map--faded');
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 var renderPin = function (property) {
   var pin = pinTemplate.cloneNode(true);
 
-  pin.style = 'left: ' + (property.offer.location.x + 45 / 2) + 'px; top: ' + (property.offer.location.y + 40) + 'px;';
+  pin.style = 'left: ' + (property.offer.location.x - PIN_WIDTH / 2) + 'px; top: ' + (property.offer.location.y - PIN_HEIGHT) + 'px;';
   pin.querySelector('img').src = property.author.avatar;
   pin.querySelector('img').alt = property.offer.title;
 
