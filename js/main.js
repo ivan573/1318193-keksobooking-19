@@ -111,23 +111,44 @@ var mapPins = document.querySelector('.map__pins');
 var adForm = document.querySelector('.ad-form');
 // var mapFilters = document.querySelector('.map__filters');
 
-mapPins.appendChild(fragment);
+// пока перенес функцию в функцию, которая активирует страницу
+// mapPins.appendChild(fragment);
+
+// активация страницы
 
 var ENTER_KEY = 'Enter';
 
 var formInputs = document.querySelectorAll('.ad-form input');
 var formSelects = document.querySelectorAll('.ad-form select');
 
-formInputs.setAttribute('disabled');
-formSelects.setAttribute('disabled');
 
-var mainPin = document.querySelector('.map__pin—main');
+// с этими двумя циклами какая-то фигня. пишет "'i' is already declared in the upper scope". я с таким еще не сталкивался и любопытно почему это так.
+var setDisabled = function (element) {
+  // eslint-disable-next-line no-shadow
+  for (var i = 0; i < element.length; i++) {
+    element[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+var removeDisabled = function (element) {
+  // eslint-disable-next-line no-shadow
+  for (var i = 0; i < element.length; i++) {
+    element[i].removeAttribute('disabled', 'disabled');
+  }
+};
+
+setDisabled(formInputs);
+setDisabled(formSelects);
+
+var mainPin = document.querySelector('.map__pin--main');
 
 var activatePage = function () {
   adsMap.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  formInputs.removeAttribute('disabled');
-  formSelects.removeAttribute('disabled');
+  removeDisabled(formInputs);
+  removeDisabled(formSelects);
+
+  mapPins.appendChild(fragment);
 };
 
 mainPin.addEventListener('mousedown', function (evt) {
@@ -142,9 +163,138 @@ mainPin.addEventListener('keydown', function (evt) {
   }
 });
 
-// address
+// адрес
 
 // var MAIN_PIN_WIDTH = 65;
 // var MAIN_PIN_HEIGHT = 65;
 
+var mainPinWidth = mainPin.offsetWidth;
+var mainPinHeight = mainPin.offsetWidth;
 
+var mainPinX = mainPin.offsetTop;
+var mainPinY = mainPin.offsetLeft;
+
+var addressX = Math.round(mainPinX + mainPinWidth / 2);
+var addressY = mainPinY + mainPinHeight;
+
+var addressField = document.querySelector('#address');
+
+var enterAddress = function (field) {
+  field.value = addressX + ', ' + addressY;
+  return field.value;
+};
+
+enterAddress(addressField);
+
+// валидация
+
+var propertyTypeField = document.querySelector('#type');
+
+/*
+var getValue = function (field) {
+  var value = field.value;
+  return value;
+};
+*/
+
+var priceField = document.querySelector('#price');
+
+/*
+var setPlaceholder = function (element, value) {
+  element.setAttribute('placeholder', value);
+};
+*/
+
+var setMinimumPrice = function () {
+  switch (propertyTypeField.value) {
+    case 'Бунгало':
+      priceField.setAttribute('min', '0');
+      priceField.setAttribute('palceholder', '0');
+      break;
+    case 'Квартира':
+      priceField.setAttribute('min', '1000');
+      priceField.setAttribute('placeholder', '1000');
+      break;
+    case 'Дом':
+      priceField.setAttribute('min', '5000');
+      priceField.setAttribute('placeholder', '1000');
+      break;
+    case 'Дворец':
+      priceField.setAttribute('min', '10000');
+      priceField.setAttribute('placeholder', '1000');
+      break;
+  }
+};
+
+// с ценой и плейсхолдером почему-то не работает
+propertyTypeField.addEventListener('change', function () {
+  setMinimumPrice();
+});
+
+var checkInField = document.querySelector('#timein');
+var checkOutField = document.querySelector('#timeout');
+
+checkInField.addEventListener('change', function () {
+  checkOutField.value = checkInField.value;
+});
+
+checkOutField.addEventListener('change', function () {
+  checkInField.value = checkOutField.value;
+});
+
+var roomsNumberField = document.querySelector('#room_number');
+var guestsNumberField = document.querySelector('#capacity');
+
+var setCapacity = function () {
+  switch (roomsNumberField.value) {
+
+    case '1':
+      switch (guestsNumberField.value) {
+        case '1':
+          guestsNumberField.setCustomValidity('');
+          break;
+        default:
+          guestsNumberField.setCustomValidity('В 1 комнате можно разместить только 1 гостя');
+          break;
+      }
+      break;
+
+    case '2':
+      switch (guestsNumberField.value) {
+        case '1':
+          guestsNumberField.setCustomValidity('');
+          break;
+        case '2':
+          guestsNumberField.setCustomValidity('');
+          break;
+        default:
+          guestsNumberField.setCustomValidity('В 2 комнатах можно разместить не более 2 гостей');
+          break;
+      }
+      break;
+
+    case '3':
+      switch (guestsNumberField.value) {
+        case '0':
+          guestsNumberField.setCustomValidity('В 3 комнатах можно разместить не более 3 гостей');
+          break;
+        default:
+          guestsNumberField.setCustomValidity('');
+          break;
+      }
+      break;
+
+    case '100':
+      guestsNumberField.setCustomValidity('');
+      break;
+  }
+};
+
+// не уверен, что с этими обработчиками событий рабочий вариант потому что по дефолту там 1 комната и 3 гостя
+roomsNumberField.addEventListener('change', function () {
+  setCapacity();
+});
+
+guestsNumberField.addEventListener('change', function () {
+  setCapacity();
+});
