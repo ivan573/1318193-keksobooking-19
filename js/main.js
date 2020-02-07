@@ -87,7 +87,7 @@ for (var i = 0; i < properties.length; i++) {
 }
 
 var adsMap = document.querySelector('.map');
-adsMap.classList.remove('map--faded');
+// adsMap.classList.remove('map--faded');
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
@@ -108,5 +108,43 @@ properties.forEach(function (property) {
 });
 
 var mapPins = document.querySelector('.map__pins');
+var adForm = document.querySelector('.ad-form');
+// var mapFilters = document.querySelector('.map__filters');
 
 mapPins.appendChild(fragment);
+
+var ENTER_KEY = 'Enter';
+
+var formInputs = document.querySelectorAll('.ad-form input');
+var formSelects = document.querySelectorAll('.ad-form select');
+
+formInputs.setAttribute('disabled');
+formSelects.setAttribute('disabled');
+
+var mainPin = document.querySelector('.map__pin—main');
+
+var activatePage = function () {
+  adsMap.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  formInputs.removeAttribute('disabled');
+  formSelects.removeAttribute('disabled');
+};
+
+mainPin.addEventListener('mousedown', function (evt) {
+  if (evt.which === 1) {
+    activatePage();
+  }
+});
+
+mainPin.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    activatePage();
+  }
+});
+
+// address
+
+// var MAIN_PIN_WIDTH = 65;
+// var MAIN_PIN_HEIGHT = 65;
+
+
