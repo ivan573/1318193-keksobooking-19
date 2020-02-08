@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 'use strict';
 
 var PIN_WIDTH = 50;
@@ -121,19 +122,15 @@ var ENTER_KEY = 'Enter';
 var formInputs = document.querySelectorAll('.ad-form input');
 var formSelects = document.querySelectorAll('.ad-form select');
 
-
-// с этими двумя циклами какая-то фигня. пишет "'i' is already declared in the upper scope". я с таким еще не сталкивался и любопытно почему это так.
 var setDisabled = function (element) {
-  // eslint-disable-next-line no-shadow
-  for (var i = 0; i < element.length; i++) {
-    element[i].setAttribute('disabled', 'disabled');
+  for (var j = 0; j < element.length; j++) {
+    element[j].setAttribute('disabled', 'disabled');
   }
 };
 
 var removeDisabled = function (element) {
-  // eslint-disable-next-line no-shadow
-  for (var i = 0; i < element.length; i++) {
-    element[i].removeAttribute('disabled', 'disabled');
+  for (var k = 0; k < element.length; k++) {
+    element[k].removeAttribute('disabled', 'disabled');
   }
 };
 
@@ -205,30 +202,24 @@ var setPlaceholder = function (element, value) {
 };
 */
 
-var setMinimumPrice = function () {
-  switch (propertyTypeField.value) {
-    case 'Бунгало':
-      priceField.setAttribute('min', '0');
-      priceField.setAttribute('palceholder', '0');
-      break;
-    case 'Квартира':
-      priceField.setAttribute('min', '1000');
-      priceField.setAttribute('placeholder', '1000');
-      break;
-    case 'Дом':
-      priceField.setAttribute('min', '5000');
-      priceField.setAttribute('placeholder', '1000');
-      break;
-    case 'Дворец':
-      priceField.setAttribute('min', '10000');
-      priceField.setAttribute('placeholder', '1000');
-      break;
-  }
+var placesPrice = {
+  bungalo: '0',
+  flat: '1000',
+  house: '5000',
+  palace: '10000'
 };
 
-// с ценой и плейсхолдером почему-то не работает
+var setPriceAttribute = function (price) {
+  priceField.setAttribute('min', price);
+  priceField.setAttribute('placeholder', price);
+};
+
+var setMinimumPrice = function (value) {
+  setPriceAttribute(placesPrice[value]);
+};
+
 propertyTypeField.addEventListener('change', function () {
-  setMinimumPrice();
+  setMinimumPrice(propertyTypeField.value);
 });
 
 var checkInField = document.querySelector('#timein');
@@ -245,56 +236,63 @@ checkOutField.addEventListener('change', function () {
 var roomsNumberField = document.querySelector('#room_number');
 var guestsNumberField = document.querySelector('#capacity');
 
-var setCapacity = function () {
-  switch (roomsNumberField.value) {
-
-    case '1':
-      switch (guestsNumberField.value) {
-        case '1':
-          guestsNumberField.setCustomValidity('');
-          break;
-        default:
-          guestsNumberField.setCustomValidity('В 1 комнате можно разместить только 1 гостя');
-          break;
-      }
-      break;
-
-    case '2':
-      switch (guestsNumberField.value) {
-        case '1':
-          guestsNumberField.setCustomValidity('');
-          break;
-        case '2':
-          guestsNumberField.setCustomValidity('');
-          break;
-        default:
-          guestsNumberField.setCustomValidity('В 2 комнатах можно разместить не более 2 гостей');
-          break;
-      }
-      break;
-
-    case '3':
-      switch (guestsNumberField.value) {
-        case '0':
-          guestsNumberField.setCustomValidity('В 3 комнатах можно разместить не более 3 гостей');
-          break;
-        default:
-          guestsNumberField.setCustomValidity('');
-          break;
-      }
-      break;
-
-    case '100':
-      guestsNumberField.setCustomValidity('');
-      break;
+var setCapacity = function (rooms, guests) {
+  if ((guests.value !== '0' && rooms.value === '100') || (guests.value === '0' && rooms.value !== '100')) {
+    guests.setCustomValidity('Для выбранного значения допустима только пара «100 комнат» — «не для гостей»');
+  } else if (guests.value > rooms.value) {
+    guests.setCustomValidity('Количество гостей не может превышать количество комнат');
+  } else {
+    guests.setCustomValidity('');
   }
+//   switch (roomsNumberField.value) {
+
+//     case '1':
+//       switch (guestsNumberField.value) {
+//         case '1':
+//           guestsNumberField.setCustomValidity('');
+//           break;
+//         default:
+//           guestsNumberField.setCustomValidity('В 1 комнате можно разместить только 1 гостя');
+//           break;
+//       }
+//       break;
+
+//     case '2':
+//       switch (guestsNumberField.value) {
+//         case '1':
+//           guestsNumberField.setCustomValidity('');
+//           break;
+//         case '2':
+//           guestsNumberField.setCustomValidity('');
+//           break;
+//         default:
+//           guestsNumberField.setCustomValidity('В 2 комнатах можно разместить не более 2 гостей');
+//           break;
+//       }
+//       break;
+
+//     case '3':
+//       switch (guestsNumberField.value) {
+//         case '0':
+//           guestsNumberField.setCustomValidity('В 3 комнатах можно разместить не более 3 гостей');
+//           break;
+//         default:
+//           guestsNumberField.setCustomValidity('');
+//           break;
+//       }
+//       break;
+
+//     case '100':
+//       guestsNumberField.setCustomValidity('');
+//       break;
+//   }
 };
 
 // не уверен, что с этими обработчиками событий рабочий вариант потому что по дефолту там 1 комната и 3 гостя
 roomsNumberField.addEventListener('change', function () {
-  setCapacity();
+  setCapacity(roomsNumberField, guestsNumberField);
 });
 
 guestsNumberField.addEventListener('change', function () {
-  setCapacity();
+  setCapacity(roomsNumberField, guestsNumberField);
 });
