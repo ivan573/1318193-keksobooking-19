@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 'use strict';
 
 var PIN_WIDTH = 50;
@@ -87,7 +88,7 @@ for (var i = 0; i < properties.length; i++) {
 }
 
 var adsMap = document.querySelector('.map');
-adsMap.classList.remove('map--faded');
+// adsMap.classList.remove('map--faded');
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
@@ -108,5 +109,190 @@ properties.forEach(function (property) {
 });
 
 var mapPins = document.querySelector('.map__pins');
+var adForm = document.querySelector('.ad-form');
+// var mapFilters = document.querySelector('.map__filters');
 
-mapPins.appendChild(fragment);
+// пока перенес функцию в функцию, которая активирует страницу
+// mapPins.appendChild(fragment);
+
+// активация страницы
+
+var ENTER_KEY = 'Enter';
+
+var formInputs = document.querySelectorAll('.ad-form input');
+var formSelects = document.querySelectorAll('.ad-form select');
+
+var setDisabled = function (element) {
+  for (var j = 0; j < element.length; j++) {
+    element[j].setAttribute('disabled', 'disabled');
+  }
+};
+
+var removeDisabled = function (element) {
+  for (var k = 0; k < element.length; k++) {
+    element[k].removeAttribute('disabled', 'disabled');
+  }
+};
+
+setDisabled(formInputs);
+setDisabled(formSelects);
+
+var mainPin = document.querySelector('.map__pin--main');
+
+var activatePage = function () {
+  adsMap.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  removeDisabled(formInputs);
+  removeDisabled(formSelects);
+
+  mapPins.appendChild(fragment);
+};
+
+mainPin.addEventListener('mousedown', function (evt) {
+  if (evt.which === 1) {
+    activatePage();
+  }
+});
+
+mainPin.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    activatePage();
+  }
+});
+
+// адрес
+
+// var MAIN_PIN_WIDTH = 65;
+// var MAIN_PIN_HEIGHT = 65;
+
+var mainPinWidth = mainPin.offsetWidth;
+var mainPinHeight = mainPin.offsetWidth;
+
+var mainPinX = mainPin.offsetTop;
+var mainPinY = mainPin.offsetLeft;
+
+var addressX = Math.round(mainPinX + mainPinWidth / 2);
+var addressY = mainPinY + mainPinHeight;
+
+var addressField = document.querySelector('#address');
+
+var enterAddress = function (field) {
+  field.value = addressX + ', ' + addressY;
+  return field.value;
+};
+
+enterAddress(addressField);
+
+// валидация
+
+var propertyTypeField = document.querySelector('#type');
+
+/*
+var getValue = function (field) {
+  var value = field.value;
+  return value;
+};
+*/
+
+var priceField = document.querySelector('#price');
+
+/*
+var setPlaceholder = function (element, value) {
+  element.setAttribute('placeholder', value);
+};
+*/
+
+var placesPrice = {
+  bungalo: '0',
+  flat: '1000',
+  house: '5000',
+  palace: '10000'
+};
+
+var setPriceAttribute = function (price) {
+  priceField.setAttribute('min', price);
+  priceField.setAttribute('placeholder', price);
+};
+
+var setMinimumPrice = function (value) {
+  setPriceAttribute(placesPrice[value]);
+};
+
+propertyTypeField.addEventListener('change', function () {
+  setMinimumPrice(propertyTypeField.value);
+});
+
+var checkInField = document.querySelector('#timein');
+var checkOutField = document.querySelector('#timeout');
+
+checkInField.addEventListener('change', function () {
+  checkOutField.value = checkInField.value;
+});
+
+checkOutField.addEventListener('change', function () {
+  checkInField.value = checkOutField.value;
+});
+
+var roomsNumberField = document.querySelector('#room_number');
+var guestsNumberField = document.querySelector('#capacity');
+
+var setCapacity = function (rooms, guests) {
+  if ((guests.value !== '0' && rooms.value === '100') || (guests.value === '0' && rooms.value !== '100')) {
+    guests.setCustomValidity('Для выбранного значения допустима только пара «100 комнат» — «не для гостей»');
+  } else if (guests.value > rooms.value) {
+    guests.setCustomValidity('Количество гостей не может превышать количество комнат');
+  } else {
+    guests.setCustomValidity('');
+  }
+//   switch (roomsNumberField.value) {
+
+//     case '1':
+//       switch (guestsNumberField.value) {
+//         case '1':
+//           guestsNumberField.setCustomValidity('');
+//           break;
+//         default:
+//           guestsNumberField.setCustomValidity('В 1 комнате можно разместить только 1 гостя');
+//           break;
+//       }
+//       break;
+
+//     case '2':
+//       switch (guestsNumberField.value) {
+//         case '1':
+//           guestsNumberField.setCustomValidity('');
+//           break;
+//         case '2':
+//           guestsNumberField.setCustomValidity('');
+//           break;
+//         default:
+//           guestsNumberField.setCustomValidity('В 2 комнатах можно разместить не более 2 гостей');
+//           break;
+//       }
+//       break;
+
+//     case '3':
+//       switch (guestsNumberField.value) {
+//         case '0':
+//           guestsNumberField.setCustomValidity('В 3 комнатах можно разместить не более 3 гостей');
+//           break;
+//         default:
+//           guestsNumberField.setCustomValidity('');
+//           break;
+//       }
+//       break;
+
+//     case '100':
+//       guestsNumberField.setCustomValidity('');
+//       break;
+//   }
+};
+
+// не уверен, что с этими обработчиками событий рабочий вариант потому что по дефолту там 1 комната и 3 гостя
+roomsNumberField.addEventListener('change', function () {
+  setCapacity(roomsNumberField, guestsNumberField);
+});
+
+guestsNumberField.addEventListener('change', function () {
+  setCapacity(roomsNumberField, guestsNumberField);
+});
