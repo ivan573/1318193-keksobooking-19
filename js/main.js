@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 'use strict';
 
 var PIN_WIDTH = 50;
@@ -88,7 +87,6 @@ for (var i = 0; i < properties.length; i++) {
 }
 
 var adsMap = document.querySelector('.map');
-// adsMap.classList.remove('map--faded');
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
@@ -110,10 +108,6 @@ properties.forEach(function (property) {
 
 var mapPins = document.querySelector('.map__pins');
 var adForm = document.querySelector('.ad-form');
-// var mapFilters = document.querySelector('.map__filters');
-
-// пока перенес функцию в функцию, которая активирует страницу
-// mapPins.appendChild(fragment);
 
 // активация страницы
 
@@ -162,9 +156,6 @@ mainPin.addEventListener('keydown', function (evt) {
 
 // адрес
 
-// var MAIN_PIN_WIDTH = 65;
-// var MAIN_PIN_HEIGHT = 65;
-
 var mainPinWidth = mainPin.offsetWidth;
 var mainPinHeight = mainPin.offsetWidth;
 
@@ -187,20 +178,7 @@ enterAddress(addressField);
 
 var propertyTypeField = document.querySelector('#type');
 
-/*
-var getValue = function (field) {
-  var value = field.value;
-  return value;
-};
-*/
-
 var priceField = document.querySelector('#price');
-
-/*
-var setPlaceholder = function (element, value) {
-  element.setAttribute('placeholder', value);
-};
-*/
 
 var placesPrice = {
   bungalo: '0',
@@ -244,51 +222,8 @@ var setCapacity = function (rooms, guests) {
   } else {
     guests.setCustomValidity('');
   }
-//   switch (roomsNumberField.value) {
-
-//     case '1':
-//       switch (guestsNumberField.value) {
-//         case '1':
-//           guestsNumberField.setCustomValidity('');
-//           break;
-//         default:
-//           guestsNumberField.setCustomValidity('В 1 комнате можно разместить только 1 гостя');
-//           break;
-//       }
-//       break;
-
-//     case '2':
-//       switch (guestsNumberField.value) {
-//         case '1':
-//           guestsNumberField.setCustomValidity('');
-//           break;
-//         case '2':
-//           guestsNumberField.setCustomValidity('');
-//           break;
-//         default:
-//           guestsNumberField.setCustomValidity('В 2 комнатах можно разместить не более 2 гостей');
-//           break;
-//       }
-//       break;
-
-//     case '3':
-//       switch (guestsNumberField.value) {
-//         case '0':
-//           guestsNumberField.setCustomValidity('В 3 комнатах можно разместить не более 3 гостей');
-//           break;
-//         default:
-//           guestsNumberField.setCustomValidity('');
-//           break;
-//       }
-//       break;
-
-//     case '100':
-//       guestsNumberField.setCustomValidity('');
-//       break;
-//   }
 };
 
-// не уверен, что с этими обработчиками событий рабочий вариант потому что по дефолту там 1 комната и 3 гостя
 roomsNumberField.addEventListener('change', function () {
   setCapacity(roomsNumberField, guestsNumberField);
 });
