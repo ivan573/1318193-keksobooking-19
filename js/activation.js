@@ -6,7 +6,7 @@
   var adsMap = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
 
-  var mapPins = document.querySelector('.map__pins');
+  // var mapPins = document.querySelector('.map__pins');
 
   var formInputs = document.querySelectorAll('.ad-form input');
   var formSelects = document.querySelectorAll('.ad-form select');
@@ -34,7 +34,8 @@
     removeDisabled(formInputs);
     removeDisabled(formSelects);
 
-    mapPins.appendChild(window.getPropertiesFragment());
+    // mapPins.appendChild(window.getPropertiesFragment());
+    window.load(window.adPins.onSuccess, window.adPins.onError);
   };
 
   window.mainPin.addEventListener('mousedown', function (evt) {
