@@ -3,7 +3,7 @@
 (function () {
   window.load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
-    var URL =  'https://js.dump.academy/keksobooking/data';
+    var URL = 'https://js.dump.academy/keksobooking/data';
 
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {

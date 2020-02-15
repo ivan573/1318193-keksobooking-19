@@ -29,13 +29,14 @@
   window.mainPin = document.querySelector('.map__pin--main');
 
   var activatePage = function () {
-    adsMap.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
-    removeDisabled(formInputs);
-    removeDisabled(formSelects);
+    if (adsMap.classList.contains('map--faded') && adForm.classList.contains('ad-form--disabled')) {
+      adsMap.classList.remove('map--faded');
+      adForm.classList.remove('ad-form--disabled');
+      removeDisabled(formInputs);
+      removeDisabled(formSelects);
 
-    // mapPins.appendChild(window.getPropertiesFragment());
-    window.load(window.adPins.onSuccess, window.adPins.onError);
+      window.load(window.adPins.onSuccess, window.adPins.onError);
+    }
   };
 
   window.mainPin.addEventListener('mousedown', function (evt) {
