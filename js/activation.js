@@ -6,7 +6,7 @@
   var adsMap = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
 
-  var mapPins = document.querySelector('.map__pins');
+  // var mapPins = document.querySelector('.map__pins');
 
   var formInputs = document.querySelectorAll('.ad-form input');
   var formSelects = document.querySelectorAll('.ad-form select');
@@ -29,12 +29,14 @@
   window.mainPin = document.querySelector('.map__pin--main');
 
   var activatePage = function () {
-    adsMap.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
-    removeDisabled(formInputs);
-    removeDisabled(formSelects);
+    if (adsMap.classList.contains('map--faded') && adForm.classList.contains('ad-form--disabled')) {
+      adsMap.classList.remove('map--faded');
+      adForm.classList.remove('ad-form--disabled');
+      removeDisabled(formInputs);
+      removeDisabled(formSelects);
 
-    mapPins.appendChild(window.getPropertiesFragment());
+      window.load(window.adPins.onSuccess, window.adPins.onError);
+    }
   };
 
   window.mainPin.addEventListener('mousedown', function (evt) {
