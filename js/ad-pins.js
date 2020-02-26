@@ -4,18 +4,79 @@
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
 
-  var properties = new Array(8);
+  var properties = new Array(5);
 
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   var mapPins = document.querySelector('.map__pins');
 
+  var propertyType = document.querySelector('#housing-type');
+
+  var propertiesFromServer;
+
   window.adPins = {
     onSuccess: function (data) {
 
+      propertiesFromServer = data;
+
+      var getRandomAd = function () {
+        var ad = propertiesFromServer[Math.floor(Math.random() * data.length)];
+        return ad;
+      };
+
       for (var i = 0; i < properties.length; i++) {
-        properties[i] = data[Math.floor(Math.random() * data.length)];
+        properties[i] = getRandomAd();
       }
+
+      var checkDuplicates = function (array) {
+
+        var check = true;
+
+        for (i = 0; check === true && i < array.length; i++) {
+          if (array.indexOf(array[i]) !== i) {
+            check = false;
+          } else {
+            check = true;
+          }
+        }
+
+        return check;
+
+      };
+
+      var uniqueProperties;
+
+      while (checkDuplicates(properties) === false) {
+
+        uniqueProperties = properties.filter(function (it, j) {
+          return properties.indexOf(it) === j;
+        });
+
+        while (uniqueProperties.length !== properties.length) {
+          uniqueProperties.push(getRandomAd());
+        }
+
+        properties = uniqueProperties;
+
+      }
+
+      window.adPins.displayPins(properties);
+
+    },
+
+    onError: function (data) {
+      var node = document.createElement('div');
+      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+      node.style.position = 'absolute';
+      node.style.left = 0;
+      node.style.right = 0;
+      node.style.fontSize = '30px';
+
+      node.textContent = data;
+      document.body.insertAdjacentElement('afterbegin', node);
+    },
+
+    displayPins: function (array) {
 
       var fragment = document.createDocumentFragment();
 
@@ -29,26 +90,27 @@
         return pin;
       };
 
-      properties.forEach(function (property) {
+      array.forEach(function (property) {
         fragment.appendChild(renderPin(property));
       });
 
       mapPins.appendChild(fragment);
-    },
 
-    onError: function (data) {
-      var node = document.createElement('div');
-      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-      node.style.position = 'absolute';
-      node.style.left = 0;
-      node.style.right = 0;
-      node.style.fontSize = '30px';
-
-      node.textContent = data;
-      document.body.insertAdjacentElement('afterbegin', node);
     }
 
   };
+
+  var removeOldPins = function () {
+    var pins = document.querySelectorAll('.map__pins .map__pin:not(.map__pin--main)');
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].remove();
+    }
+  };
+
+  propertyType.addEventListener('change', function () {
+    removeOldPins();
+    window.adPins.displayPins(window.filterProperties(propertiesFromServer));
+  });
 
 })();
 
