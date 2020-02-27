@@ -20,8 +20,7 @@
       propertiesFromServer = data;
 
       var getRandomAd = function () {
-        var ad = propertiesFromServer[Math.floor(Math.random() * data.length)];
-        return ad;
+        return propertiesFromServer[Math.floor(Math.random() * propertiesFromServer.length)];
       };
 
       for (var i = 0; i < properties.length; i++) {
@@ -33,11 +32,7 @@
         var check = true;
 
         for (i = 0; check === true && i < array.length; i++) {
-          if (array.indexOf(array[i]) !== i) {
-            check = false;
-          } else {
-            check = true;
-          }
+          check = (array.indexOf(array[i]) === i);
         }
 
         return check;
@@ -109,7 +104,11 @@
 
   propertyType.addEventListener('change', function () {
     removeOldPins();
-    window.adPins.displayPins(window.filterProperties(propertiesFromServer));
+    if (propertyType.value === 'any') {
+      window.adPins.displayPins(properties); // тут, возможно, нужно как-то допилить
+    } else {
+      window.adPins.displayPins(window.filterProperties(propertiesFromServer));
+    }
   });
 
 })();

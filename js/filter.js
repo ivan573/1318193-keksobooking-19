@@ -4,19 +4,14 @@
 
   var getFilterPropertyType = function () {
 
-    var type = document.querySelector('#housing-type').value;
-
-    return type;
+    return document.querySelector('#housing-type').value;
   };
 
   window.filterProperties = function (array) {
 
-    var filteredProperties = array.filter(function (element) {
-
+    return array.filter(function (element) {
       return element.offer.type === getFilterPropertyType();
     });
-
-    return filteredProperties;
   };
 
 })();
