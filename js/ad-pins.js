@@ -76,7 +76,7 @@
           return properties.indexOf(it) === k;
         });
 
-        while (uniqueProperties.length !== properties.length) {
+        while (uniqueProperties.length < properties.length) {
           uniqueProperties.push(getRandomAd(propertiesFromServer));
         }
 

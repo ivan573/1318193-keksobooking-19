@@ -5,7 +5,7 @@
   var MAX_ADS_TO_DISPLAY = 5;
 
   var getRandomIndex = function (array) {
-    return Math.abs(Math.floor(Math.random() * array.length) - (MAX_ADS_TO_DISPLAY - 1));
+    return Math.floor(Math.random() * (array.length - MAX_ADS_TO_DISPLAY - 1));
   };
 
   var getFilterPropertyType = function () {
