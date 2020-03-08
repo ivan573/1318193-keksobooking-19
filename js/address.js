@@ -4,19 +4,24 @@
   var mainPinWidth = window.mainPin.offsetWidth;
   var mainPinHeight = window.mainPin.offsetWidth;
 
-  var mainPinX = window.mainPin.offsetTop;
-  var mainPinY = window.mainPin.offsetLeft;
+  var getAddressX = function () {
+    var mainPinX = window.mainPin.offsetTop;
+    return Math.round(mainPinX + mainPinWidth / 2);
+  };
 
-  var addressX = Math.round(mainPinX + mainPinWidth / 2);
-  var addressY = mainPinY + mainPinHeight;
+
+  var getAddressY = function () {
+    var mainPinY = window.mainPin.offsetLeft;
+    return mainPinY + mainPinHeight;
+  };
 
   var addressField = document.querySelector('#address');
 
-  var enterAddress = function (field) {
-    field.value = addressX + ', ' + addressY;
-    return field.value;
+  window.enterAddress = function () {
+    addressField.value = getAddressX() + ', ' + getAddressY();
   };
 
-  enterAddress(addressField);
+  // надо будет еще как-то придумать как сделать чтобы нельзя было пин вытащить за границы карты
+  window.enterAddress();
 
 })();
