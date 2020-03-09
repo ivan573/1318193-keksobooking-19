@@ -33,7 +33,7 @@
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
 
-      window.enterAddress();
+      window.updateAddress();
 
     };
 

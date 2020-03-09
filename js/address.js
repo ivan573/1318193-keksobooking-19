@@ -17,11 +17,11 @@
 
   var addressField = document.querySelector('#address');
 
-  window.enterAddress = function () {
+  window.updateAddress = function () {
     addressField.value = getAddressX() + ', ' + getAddressY();
   };
 
   // надо будет еще как-то придумать как сделать чтобы нельзя было пин вытащить за границы карты
-  window.enterAddress();
+  window.updateAddress();
 
 })();

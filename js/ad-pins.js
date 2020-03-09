@@ -38,13 +38,6 @@
 
   };
 
-  var removeOldPins = function () {
-    var pins = document.querySelectorAll('.map__pins .map__pin:not(.map__pin--main)');
-    for (var i = 0; i < pins.length; i++) {
-      pins[i].remove();
-    }
-  };
-
   window.adPins = {
     onSuccess: function (data) {
 
@@ -104,12 +97,19 @@
 
       node.textContent = data;
       document.body.insertAdjacentElement('afterbegin', node);
+    },
+
+    removeOldPins: function () {
+      var pins = document.querySelectorAll('.map__pins .map__pin:not(.map__pin--main)');
+      for (var i = 0; i < pins.length; i++) {
+        pins[i].remove();
+      }
     }
 
   };
 
   propertyType.addEventListener('change', function () {
-    removeOldPins();
+    window.adPins.removeOldPins();
     if (propertyType.value === 'any') {
       window.adPins.onSuccess(propertiesFromServer); // это ведь не будет считаться костылем?
     } else {

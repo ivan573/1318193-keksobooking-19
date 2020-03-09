@@ -166,6 +166,13 @@
           }
         });
       });
+    },
+
+    removeOldCards: function () {
+      var cards = document.querySelectorAll('.map__cards');
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].remove();
+      }
     }
   };
 

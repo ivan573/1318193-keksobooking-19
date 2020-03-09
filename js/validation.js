@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var propertyTypeField = document.querySelector('#type');
 
   var priceField = document.querySelector('#price');
