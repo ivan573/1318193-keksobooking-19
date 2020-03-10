@@ -35,8 +35,17 @@
       removeDisabled(formInputs);
       removeDisabled(formSelects);
 
-      window.load(window.adPins.onSuccess, window.adPins.onError);
+      window.backend.load(window.adPins.onSuccess, window.adPins.onError);
     }
+  };
+
+  window.deactivatePage = function () {
+    adsMap.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+    setDisabled(formInputs);
+    setDisabled(formSelects);
+    window.adPins.removeOldPins();
+    window.cards.removeOldCards();
   };
 
   window.mainPin.addEventListener('mousedown', function (evt) {
