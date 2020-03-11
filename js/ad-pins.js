@@ -12,7 +12,9 @@
 
   var mapPins = document.querySelector('.map__pins');
 
-  var propertyType = document.querySelector('#housing-type');
+  var filters = document.querySelectorAll('.map__filter');
+
+  var checkboxFilters = document.querySelectorAll('#housing-features input');
 
   var propertiesFromServer;
 
@@ -108,13 +110,33 @@
 
   };
 
-  propertyType.addEventListener('change', function () {
-    window.adPins.removeOldPins();
-    if (propertyType.value === 'any') {
-      window.adPins.onSuccess(propertiesFromServer); // это ведь не будет считаться костылем?
-    } else {
-      displayPins(window.filterProperties(propertiesFromServer));
-    }
-  });
+  var addFilterEventListener = function (filtersList) {
+    filtersList.forEach(function (it) {
+      it.addEventListener('change', function () {
+        var filteredProperties = window.filterProperties(propertiesFromServer);
+
+        window.adPins.removeOldPins();
+        displayPins(filteredProperties);
+
+        window.cards.removeOldCards();
+        window.cards.displayAdCards(filteredProperties);
+
+        window.cards.setPinEventListeners();
+        window.cards.setCardsEventListeners();
+      });
+    });
+  };
+
+  addFilterEventListener(filters);
+  addFilterEventListener(checkboxFilters);
+
+  // propertyType.addEventListener('change', function () {
+  //   window.adPins.removeOldPins();
+  //   if (propertyType.value === 'any') {
+  //     window.adPins.onSuccess(propertiesFromServer); // это ведь не будет считаться костылем?
+  //   } else {
+  //     displayPins(window.filterProperties(propertiesFromServer));
+  //   }
+  // });
 
 })();
