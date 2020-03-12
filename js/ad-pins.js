@@ -12,7 +12,9 @@
 
   var mapPins = document.querySelector('.map__pins');
 
-  var propertyType = document.querySelector('#housing-type');
+  var filters = document.querySelectorAll('.map__filter');
+
+  var checkboxFilters = document.querySelectorAll('#housing-features input');
 
   var propertiesFromServer;
 
@@ -108,13 +110,39 @@
 
   };
 
-  propertyType.addEventListener('change', function () {
+  var onFilterChange = function () {
+    var filteredProperties = window.filterProperties(propertiesFromServer);
+
     window.adPins.removeOldPins();
-    if (propertyType.value === 'any') {
-      window.adPins.onSuccess(propertiesFromServer); // это ведь не будет считаться костылем?
-    } else {
-      displayPins(window.filterProperties(propertiesFromServer));
-    }
-  });
+    displayPins(filteredProperties);
+
+    window.cards.removeOldCards();
+    window.cards.displayAdCards(filteredProperties);
+
+    window.cards.setPinEventListeners();
+    window.cards.setCardsEventListeners();
+  };
+
+  var debounce = window.debounce(onFilterChange);
+
+  var addFilterEventListener = function (filtersList) {
+    filtersList.forEach(function (it) {
+      it.addEventListener('change', function () {
+        debounce();
+      });
+    });
+  };
+
+  addFilterEventListener(filters);
+  addFilterEventListener(checkboxFilters);
+
+  // propertyType.addEventListener('change', function () {
+  //   window.adPins.removeOldPins();
+  //   if (propertyType.value === 'any') {
+  //     window.adPins.onSuccess(propertiesFromServer); // это ведь не будет считаться костылем?
+  //   } else {
+  //     displayPins(window.filterProperties(propertiesFromServer));
+  //   }
+  // });
 
 })();
