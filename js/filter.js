@@ -78,7 +78,7 @@
         }
         break;
       default:
-        if (property.offer.guests <= getHousingGuests()) {
+        if (property.offer.guests <= getHousingGuests() && Number(getHousingGuests()) !== 0) {
           rank++;
         }
         break;

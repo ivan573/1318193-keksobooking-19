@@ -110,19 +110,25 @@
 
   };
 
+  var onFilterChange = function () {
+    var filteredProperties = window.filterProperties(propertiesFromServer);
+
+    window.adPins.removeOldPins();
+    displayPins(filteredProperties);
+
+    window.cards.removeOldCards();
+    window.cards.displayAdCards(filteredProperties);
+
+    window.cards.setPinEventListeners();
+    window.cards.setCardsEventListeners();
+  };
+
+  var debounce = window.debounce(onFilterChange);
+
   var addFilterEventListener = function (filtersList) {
     filtersList.forEach(function (it) {
       it.addEventListener('change', function () {
-        var filteredProperties = window.filterProperties(propertiesFromServer);
-
-        window.adPins.removeOldPins();
-        displayPins(filteredProperties);
-
-        window.cards.removeOldCards();
-        window.cards.displayAdCards(filteredProperties);
-
-        window.cards.setPinEventListeners();
-        window.cards.setCardsEventListeners();
+        debounce();
       });
     });
   };
