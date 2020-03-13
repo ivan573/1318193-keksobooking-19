@@ -78,7 +78,7 @@
         }
         break;
       default:
-        if (property.offer.guests <= getHousingGuests() && Number(getHousingGuests()) !== 0) {
+        if (property.offer.guests >= getHousingGuests() && Number(getHousingGuests()) !== 0) {
           rank++;
         }
         break;
@@ -121,10 +121,6 @@
         return rankDiff;
       });
 
-    // var filteredProperties = array.filter(function (element) {
-    //   return element.offer.type === getFilterPropertyType(); // housing type
-    // });
-
     if (filteredProperties.length <= MAX_ADS_TO_DISPLAY) {
       return filteredProperties;
     } else {
@@ -132,10 +128,6 @@
       return filteredProperties.slice(randomIndex, randomIndex + (MAX_ADS_TO_DISPLAY - 1));
     }
 
-    // return array.filter(function (element) {
-    //   return element.offer.type === getFilterPropertyType();
-    // })
-    // .slice(0, (MAX_ADS_TO_DISPLAY - 1));
   };
 
 })();

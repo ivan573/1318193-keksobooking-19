@@ -6,8 +6,6 @@
   var adsMap = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
 
-  // var mapPins = document.querySelector('.map__pins');
-
   var formInputs = document.querySelectorAll('.ad-form input');
   var formSelects = document.querySelectorAll('.ad-form select');
 

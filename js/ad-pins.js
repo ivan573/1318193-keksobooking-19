@@ -8,15 +8,13 @@
 
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
-  // var adCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-
   var mapPins = document.querySelector('.map__pins');
 
   var filters = document.querySelectorAll('.map__filter');
 
   var checkboxFilters = document.querySelectorAll('#housing-features input');
 
-  var propertiesFromServer;
+  // var propertiesFromServer;
 
   var displayPins = function (array) {
 
@@ -28,6 +26,8 @@
       pin.style = 'left: ' + (property.location.x - PIN_WIDTH / 2) + 'px; top: ' + (property.location.y - PIN_HEIGHT) + 'px;';
       pin.querySelector('img').src = property.author.avatar;
       pin.querySelector('img').alt = property.offer.title;
+
+      pin.setAttribute('index', property.index);
 
       return pin;
     };
@@ -41,16 +41,26 @@
   };
 
   window.adPins = {
+
+    propertiesFromServer: [],
+
     onSuccess: function (data) {
 
-      propertiesFromServer = data;
+      window.adPins.propertiesFromServer = data;
+
+      var propertyIndex = 0;
+
+      window.adPins.propertiesFromServer.forEach(function (it) {
+        it.index = propertyIndex;
+        propertyIndex++;
+      });
 
       var getRandomAd = function (array) {
         return array[Math.floor(Math.random() * array.length)];
       };
 
       for (var i = 0; i < properties.length; i++) {
-        properties[i] = getRandomAd(propertiesFromServer);
+        properties[i] = getRandomAd(window.adPins.propertiesFromServer);
       }
 
       var checkDuplicates = function (array) {
@@ -74,7 +84,7 @@
         });
 
         while (uniqueProperties.length < properties.length) {
-          uniqueProperties.push(getRandomAd(propertiesFromServer));
+          uniqueProperties.push(getRandomAd(window.adPins.propertiesFromServer));
         }
 
         properties = uniqueProperties;
@@ -82,10 +92,8 @@
       }
 
       displayPins(properties);
-      window.cards.displayAdCards(properties);
 
       window.cards.setPinEventListeners();
-      window.cards.setCardsEventListeners();
 
     },
 
@@ -111,16 +119,14 @@
   };
 
   var onFilterChange = function () {
-    var filteredProperties = window.filterProperties(propertiesFromServer);
+    var filteredProperties = window.filterProperties(window.adPins.propertiesFromServer);
 
     window.adPins.removeOldPins();
     displayPins(filteredProperties);
 
     window.cards.removeOldCards();
-    window.cards.displayAdCards(filteredProperties);
 
     window.cards.setPinEventListeners();
-    window.cards.setCardsEventListeners();
   };
 
   var debounce = window.debounce(onFilterChange);
@@ -135,14 +141,5 @@
 
   addFilterEventListener(filters);
   addFilterEventListener(checkboxFilters);
-
-  // propertyType.addEventListener('change', function () {
-  //   window.adPins.removeOldPins();
-  //   if (propertyType.value === 'any') {
-  //     window.adPins.onSuccess(propertiesFromServer); // это ведь не будет считаться костылем?
-  //   } else {
-  //     displayPins(window.filterProperties(propertiesFromServer));
-  //   }
-  // });
 
 })();

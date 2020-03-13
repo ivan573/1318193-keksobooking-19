@@ -2,13 +2,12 @@
 
 (function () {
   var mainPinWidth = window.mainPin.offsetWidth;
-  var mainPinHeight = window.mainPin.offsetWidth;
+  var mainPinHeight = window.mainPin.offsetHeight;
 
   var getAddressX = function () {
     var mainPinX = window.mainPin.offsetTop;
     return Math.round(mainPinX + mainPinWidth / 2);
   };
-
 
   var getAddressY = function () {
     var mainPinY = window.mainPin.offsetLeft;
@@ -21,7 +20,6 @@
     addressField.value = getAddressX() + ', ' + getAddressY();
   };
 
-  // надо будет еще как-то придумать как сделать чтобы нельзя было пин вытащить за границы карты
   window.updateAddress();
 
 })();

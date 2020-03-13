@@ -9,7 +9,7 @@
   var refreshForm = function () {
     adForm.reset();
     // не понимаю почему не срабатывает обновление адреса
-    window.updateAddress();
+    setTimeout(window.updateAddress(), 1000);
   };
 
   var onSuccess = function () {
