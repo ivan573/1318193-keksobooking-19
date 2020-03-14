@@ -8,28 +8,79 @@
 
   var refreshForm = function () {
     adForm.reset();
-    // не понимаю почему не срабатывает обновление адреса
-    setTimeout(window.updateAddress(), 1000);
+    setTimeout(window.updateAddress, 5);
   };
 
   var onSuccess = function () {
     window.deactivatePage();
     refreshForm();
 
-    var successMessage = document.querySelector('#success').cloneNode(true);
-    document.querySelector('main').appendChild(successMessage);
-    document.addEventListener('click', function () {
+    var successMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+
+    var onAction = function () {
       successMessage.remove();
+      document.removeEventListener('click', function () {
+        onAction();
+      });
+      document.removeEventListener('keydown', onEscPress);
+    };
+
+    var onEscPress = function (evt) {
+      if (evt.key === window.utils.ESC_KEY) {
+        onAction();
+      }
+    };
+
+    document.querySelector('main').appendChild(successMessage);
+
+    document.addEventListener('click', function () {
+      onAction();
     });
+    document.addEventListener('keydown', onEscPress);
   };
 
   var onError = function () {
 
+    var errorMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+
+    var closeButton = errorMessage.errorMessage.querySelector('button');
+
+    var onAction = function () {
+      errorMessage.remove();
+      document.removeEventListener('click', function () {
+        onAction();
+      });
+      document.revomeEventListener('keydown', onEscPress);
+      closeButton.removeEventListener('keydown', onEnterPress);
+    };
+
+    var onEscPress = function (evt) {
+      if (evt.key === window.utils.ESC_KEY) {
+        onAction();
+      }
+    };
+
+    var onEnterPress = function (evt) {
+      if (evt.key === window.utils.ENTER_KEY) {
+        onAction();
+      }
+    };
+
+    document.querySelector('main').appendChild(errorMessage);
+
+    document.addEventListener('click', function () {
+      onAction();
+    });
+    document.addEventListener('keydown', onEscPress);
+    closeButton.addEventListener('click', function () {
+      onAction();
+    });
+    closeButton.addEventListener('keydown', onEnterPress);
   };
 
   adForm.addEventListener('submit', function (evt) {
-    window.backend.save(new FormData(adForm), onSuccess, onError);
     evt.preventDefault();
+    window.backend.save(new FormData(adForm), onSuccess, onError);
   });
 
   resetButton.addEventListener('click', function () {

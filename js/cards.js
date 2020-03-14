@@ -2,9 +2,6 @@
 
 (function () {
 
-  var ESC_KEY = 'Escape';
-  var ENTER_KEY = 'Enter';
-
   var PROPERTY_TYPES = {
     flat: 'Квартира',
     bungalo: 'Бунгало',
@@ -73,7 +70,7 @@
         window.cards.removeOldCards();
       });
       it.addEventListener('keydown', function (evt) {
-        if (evt.key === ENTER_KEY) {
+        if (evt.key === window.utils.ENTER_KEY) {
           window.cards.removeOldCards();
         }
       });
@@ -93,7 +90,7 @@
   };
 
   var onEscPress = function (evt) {
-    if (evt.key === ESC_KEY) {
+    if (evt.key === window.utils.ESC_KEY) {
       window.cards.removeOldCards();
     }
   };
@@ -130,7 +127,7 @@
           onPinClicking(it);
         });
         it.addEventListener('keydown', function (evt) {
-          if (evt.key === ENTER_KEY) {
+          if (evt.key === window.utils.ENTER_KEY) {
             onPinClicking(it);
           }
         });

@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var ENTER_KEY = 'Enter';
 
   var adsMap = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
@@ -53,7 +52,7 @@
   });
 
   window.mainPin.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
+    if (evt.key === window.utils.ENTER_KEY) {
       activatePage();
     }
   });
