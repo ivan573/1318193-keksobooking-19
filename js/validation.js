@@ -46,7 +46,7 @@
   var roomsNumberField = document.querySelector('#room_number');
   var guestsNumberField = document.querySelector('#capacity');
 
-  // the functions sets capacity depending on the number of guests
+  // the function sets the capacity depending on the number of guests
   var setCapacity = function (rooms, guests) {
     if ((guests.value !== '0' && rooms.value === '100') || (guests.value === '0' && rooms.value !== '100')) {
       guests.setCustomValidity('Для выбранного значения допустима только пара «100 комнат» — «не для гостей»');
@@ -57,8 +57,12 @@
     }
   };
 
-  // setting event listener for changung the number of rooms filter
+  // setting event listeners for room number and guest number change
   roomsNumberField.addEventListener('change', function () {
+    setCapacity(roomsNumberField, guestsNumberField);
+  });
+
+  guestsNumberField.addEventListener('change', function () {
     setCapacity(roomsNumberField, guestsNumberField);
   });
 
