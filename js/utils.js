@@ -21,6 +21,8 @@
       palace: 'Дворец'
     },
 
-    DEBOUNCE_INTERVAL: 500
+    DEBOUNCE_INTERVAL: 500,
+
+    FILE_TYPES: ['gif', 'jpg', 'jpeg', 'png']
   };
 })();

@@ -6,6 +6,12 @@
 
   var resetButton = document.querySelector('.ad-form__reset');
 
+  var avatarChooser = document.querySelector('input.ad-form-header__input');
+  var avatarPreview = document.querySelector('.ad-form-header__preview img');
+
+  var propertyPhotoChooser = document.querySelector('.ad-form__upload input');
+  var propertyPhotoPreview = document.querySelector('.ad-form__photo img');
+
   var refreshForm = function () {
     adForm.reset();
     setTimeout(window.updateAddress, 5);
@@ -87,5 +93,29 @@
     refreshForm();
   });
 
+  var setChooserEventListeners = function (chooser, preview) {
+    chooser.addEventListener('change', function () {
+      var file = chooser.files[0];
+      var fileName = file.name.toLowerCase();
+
+      var matches = window.utils.FILE_TYPES.some(function (it) {
+        return fileName.endsWith(it);
+      });
+
+      if (matches) {
+        var reader = new FileReader();
+
+        reader.addEventListener('load', function () {
+
+          preview.src = reader.result;
+        });
+
+        reader.readAsDataURL(file);
+      }
+    });
+  };
+
+  setChooserEventListeners(avatarChooser, avatarPreview);
+  setChooserEventListeners(propertyPhotoChooser, propertyPhotoPreview);
 
 })();
