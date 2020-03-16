@@ -2,10 +2,12 @@
 
 (function () {
 
+  // the function returns the current displayed pins
   var getPins = function () {
     return document.querySelectorAll('.map__pin:not(.map__pin--main)');
   };
 
+  // the function assings data to the most simple elements of the card
   var assignContent = function (cardField, propertyData) {
     if (propertyData) {
       cardField.textContent = propertyData;
@@ -31,28 +33,33 @@
       avatar: card.querySelector('.popup__avatar')
     };
 
+    // assingning title, address and price to the card
     assignContent(cardElements.title, property.offer.title);
     assignContent(cardElements.address, property.offer.address);
     assignContent(cardElements.price, property.offer.price + '₽/ночь');
 
+    // assigning type of the property to the card
     if (property.offer.type) {
       cardElements.type.textContent = window.utils.PROPERTY_TYPES[property.offer.type];
     } else {
       cardElements.type.textContent = '';
     }
 
+    // assingning nunmber of rooms and guests to the card
     if (property.offer.rooms || property.offer.rooms === 0 || property.offer.guests || property.offer.guests === 0) {
       cardElements.capacity.textContent = property.offer.rooms + ' комнаты для ' + property.offer.guests + ' гостей';
     } else {
       cardElements.capacity.textContent = '';
     }
 
+    // assigning check-in and check-out time
     if (property.offer.checkin && property.offer.checkout) {
       cardElements.time.textContent = 'Заезд после ' + property.offer.checkin + ', выезд до ' + property.offer.checkout;
     } else {
       cardElements.time.textContent = '';
     }
 
+    // features
     cardElements.features.innerHTML = '';
     if (property.offer.features) {
       property.offer.features.forEach(function (it) {
@@ -62,8 +69,10 @@
       });
     }
 
+    // description
     assignContent(cardElements.description, property.offer.description);
 
+    // photos
     var photo = cardElements.photos.querySelector('img').cloneNode(true);
     cardElements.photos.innerHTML = '';
     if (property.offer.photos) {
@@ -74,6 +83,7 @@
       });
     }
 
+    // avatar
     if (property.author.avatar) {
       cardElements.avatar.src = property.author.avatar;
     } else {
@@ -82,16 +92,19 @@
 
     document.querySelector('.map__filters-container').before(card);
 
+    // setting card event listeners and escape button event listener
     setCardEventListeners();
     document.addEventListener('keydown', onEscPress);
   };
 
+  // the function removes the 'active' class from the pins
   var removeActiveClass = function (array) {
     array.forEach(function (it) {
       it.classList.remove('map__pin--active');
     });
   };
 
+  // the function adds event listeners to the cards to close the cards and remove the 'active' class
   var setCardEventListeners = function () {
     var pins = getPins();
     var closeButton = document.querySelector('.popup__close');
@@ -107,18 +120,22 @@
     });
   };
 
+  // the function checks whether there is an open card
   var checkOpenedCards = function () {
     var openedCard = document.querySelector('.map__card');
 
     return openedCard ? true : false;
   };
 
+  // this is what happens when you press the escape button when a card is open (is closes)
   var onEscPress = function (evt) {
     if (evt.key === window.utils.ESC_KEY) {
       window.cards.removeOldCard();
     }
   };
 
+  // this is what happens when you click on a pin: active class removed from the old pin and assigned to the clicken one,
+  // a new card is displayed
   var onPinClicking = function (element, array) {
     removeActiveClass(array);
     element.classList.add('map__pin--active');
@@ -130,9 +147,11 @@
     }
   };
 
+  // the function finds the corresponding ad for the pin by the index assigned earlier and returns it
   var getCorrespondingAd = function (adsList, pin) {
     var correspondingAd;
 
+    // the check variable helps the loop stop as soon as the needed ad is found
     var check = false;
     for (var i = 0; i < adsList.length && check === false; i++) {
       check = (Number(pin.getAttribute('index')) === adsList[i].index);
@@ -146,6 +165,7 @@
 
   window.cards = {
 
+    // here all the needed event listeners are set for the displayed pins
     setPinEventListeners: function () {
       var pins = getPins();
       pins.forEach(function (it) {
@@ -160,6 +180,7 @@
       });
     },
 
+    // this function removes the displayed card
     removeOldCard: function () {
       var card = document.querySelector('.map__card');
       if (card) {

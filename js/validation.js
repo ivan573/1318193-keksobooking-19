@@ -13,6 +13,7 @@
     palace: '10000'
   };
 
+  // the function sets minimum prices and placeholders for the price field
   var setPriceAttribute = function (price) {
     priceField.setAttribute('min', price);
     priceField.setAttribute('placeholder', price);
@@ -22,8 +23,10 @@
     setPriceAttribute(propertyMinimumPrice[value]);
   };
 
+  // setting the price for the initial property type
   setMinimumPrice(document.querySelector('#type').value);
 
+  // setting event listeners for property type change
   propertyTypeField.addEventListener('change', function () {
     setMinimumPrice(propertyTypeField.value);
   });
@@ -31,6 +34,7 @@
   var checkInField = document.querySelector('#timein');
   var checkOutField = document.querySelector('#timeout');
 
+  // two event listeners, which adjust the check-in and check-out time whenever one is changed
   checkInField.addEventListener('change', function () {
     checkOutField.value = checkInField.value;
   });
@@ -42,6 +46,7 @@
   var roomsNumberField = document.querySelector('#room_number');
   var guestsNumberField = document.querySelector('#capacity');
 
+  // the functions sets capacity depending on the number of guests
   var setCapacity = function (rooms, guests) {
     if ((guests.value !== '0' && rooms.value === '100') || (guests.value === '0' && rooms.value !== '100')) {
       guests.setCustomValidity('Для выбранного значения допустима только пара «100 комнат» — «не для гостей»');
@@ -52,11 +57,8 @@
     }
   };
 
+  // setting event listener for changung the number of rooms filter
   roomsNumberField.addEventListener('change', function () {
-    setCapacity(roomsNumberField, guestsNumberField);
-  });
-
-  guestsNumberField.addEventListener('change', function () {
     setCapacity(roomsNumberField, guestsNumberField);
   });
 

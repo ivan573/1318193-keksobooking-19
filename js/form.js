@@ -12,17 +12,21 @@
   var propertyPhotoChooser = document.querySelector('.ad-form__upload input');
   var propertyPhotoPreview = document.querySelector('.ad-form__photo img');
 
+  // the function resets the form
   var refreshForm = function () {
     adForm.reset();
-    setTimeout(window.updateAddress, 5);
+    setTimeout(window.updateAddress, 5); // a timeout is needed because otherwise the address box stays empty
   };
 
+  // success function for uploading data to the server
   var onSuccess = function () {
+    // deactivating the page
     window.activation.deactivatePage();
     refreshForm();
 
     var successMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
 
+    // function for user clicking of the screen or pressing escape. it removes the message and the event listeners.
     var onAction = function () {
       successMessage.remove();
       document.removeEventListener('click', function () {
@@ -37,14 +41,17 @@
       }
     };
 
+    // displaying the message
     document.querySelector('main').appendChild(successMessage);
 
+    // adding the message eventlisteners
     document.addEventListener('click', function () {
       onAction();
     });
     document.addEventListener('keydown', onEscPress);
   };
 
+  // same as previous but with the upload failure message
   var onError = function () {
     var errorMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 
@@ -83,16 +90,19 @@
     closeButton.addEventListener('keydown', onEnterPress);
   };
 
+  // adding event listener to the submit button
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.save(new FormData(adForm), onSuccess, onError);
   });
 
+  // event listener for the refresh button
   resetButton.addEventListener('click', function () {
     window.activation.deactivatePage();
     refreshForm();
   });
 
+  // event listeners for the picture upload buttons
   var setChooserEventListeners = function (chooser, preview) {
     chooser.addEventListener('change', function () {
       var file = chooser.files[0];

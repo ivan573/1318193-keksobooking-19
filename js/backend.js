@@ -9,11 +9,11 @@
       xhr.addEventListener('load', function () {
         if (xhr.status === 200) {
           try {
-            onLoad(JSON.parse(xhr.responseText));
+            onLoad(JSON.parse(xhr.responseText)); // this line is written in case of gettin an non-json response from the server
           } catch (err) {
             onError(err.message);
           }
-        } else {
+        } else { // here a relatively detailed message is transfered to the onError function if the code is not 200
           onError('Ошибка ' + xhr.status + ': ' + getError(window.statusCodeList, xhr.status));
         }
       });
@@ -55,6 +55,7 @@
     }
   };
 
+  // this function return a message from the errors dictionary
   var getError = function (object, key) {
     return object[key];
   };

@@ -16,6 +16,8 @@
 
   var addressField = document.querySelector('#address');
 
+  // this is the main part of the module. the function assigns a string with the main pin coordinates
+  // to the address box in the form.
   window.updateAddress = function () {
     addressField.value = getAddressX() + ', ' + getAddressY();
   };
