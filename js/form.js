@@ -12,7 +12,7 @@
   };
 
   var onSuccess = function () {
-    window.deactivatePage();
+    window.activation.deactivatePage();
     refreshForm();
 
     var successMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
@@ -40,10 +40,9 @@
   };
 
   var onError = function () {
-
     var errorMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 
-    var closeButton = errorMessage.errorMessage.querySelector('button');
+    var closeButton = errorMessage.querySelector('button');
 
     var onAction = function () {
       errorMessage.remove();
@@ -84,6 +83,7 @@
   });
 
   resetButton.addEventListener('click', function () {
+    window.activation.deactivatePage();
     refreshForm();
   });
 

@@ -1,16 +1,16 @@
 'use strict';
 
 (function () {
-  var mainPinWidth = window.mainPin.offsetWidth;
-  var mainPinHeight = window.mainPin.offsetHeight;
+  var mainPinWidth = window.activation.mainPin.offsetWidth;
+  var mainPinHeight = window.activation.mainPin.offsetHeight;
 
   var getAddressX = function () {
-    var mainPinX = window.mainPin.offsetTop;
+    var mainPinX = window.activation.mainPin.offsetTop;
     return Math.round(mainPinX + mainPinWidth / 2);
   };
 
   var getAddressY = function () {
-    var mainPinY = window.mainPin.offsetLeft;
+    var mainPinY = window.activation.mainPin.offsetLeft;
     return mainPinY + mainPinHeight;
   };
 

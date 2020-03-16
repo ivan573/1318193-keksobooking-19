@@ -22,6 +22,8 @@
     setPriceAttribute(propertyMinimumPrice[value]);
   };
 
+  setMinimumPrice(document.querySelector('#type').value);
+
   propertyTypeField.addEventListener('change', function () {
     setMinimumPrice(propertyTypeField.value);
   });

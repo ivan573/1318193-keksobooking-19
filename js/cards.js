@@ -2,102 +2,128 @@
 
 (function () {
 
-  var PROPERTY_TYPES = {
-    flat: 'Квартира',
-    bungalo: 'Бунгало',
-    house: 'Дом',
-    palace: 'Дворец'
+  var getPins = function () {
+    return document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  };
+
+  var assignContent = function (cardField, propertyData) {
+    if (propertyData) {
+      cardField.textContent = propertyData;
+    } else {
+      cardField.textContent = '';
+    }
   };
 
   var displayAdCard = function (property) {
 
     var card = document.querySelector('#card').content.querySelector('.map__card').cloneNode(true);
 
-    // тут я насоздавал переменных на случай простоты понимания кода на случай если делать ифэлсы
-    // делать ифэлсы я подумал для реализации части задания "Если данных для заполнения не хватает, соответствующий блок в карточке скрывается"
-    // но не очень понял обязательно ли это. вроде и так все нормально отображается кроме фото (об этом дальше коммент).
+    var cardElements = {
+      title: card.querySelector('.popup__title'),
+      address: card.querySelector('.popup__text--address'),
+      price: card.querySelector('.popup__text--price'),
+      type: card.querySelector('.popup__type'),
+      capacity: card.querySelector('.popup__text--capacity'),
+      time: card.querySelector('.popup__text--time'),
+      features: card.querySelector('.popup__features'),
+      description: card.querySelector('.popup__description'),
+      photos: card.querySelector('.popup__photos'),
+      avatar: card.querySelector('.popup__avatar')
+    };
 
-    // var title = card.querySelector('.popup__title');
-    // var address = card.querySelector('.popup__text--address');
-    // var price = card.querySelector('.popup__text--price');
-    // var type = card.querySelector('.popup__type');
-    // var capacity = card.querySelector('.popup__text--capacity');
-    // var time = card.querySelector('.popup__text--time');
-    var features = card.querySelector('.popup__features');
-    // var description = card.querySelector('.popup__description');
-    var photos = card.querySelector('.popup__photos');
+    assignContent(cardElements.title, property.offer.title);
+    assignContent(cardElements.address, property.offer.address);
+    assignContent(cardElements.price, property.offer.price + '₽/ночь');
 
-    card.querySelector('.popup__title').textContent = property.offer.title;
-    card.querySelector('.popup__text--address').textContent = property.offer.address;
-    card.querySelector('.popup__text--price').textContent = property.offer.price + '₽/ночь';
+    if (property.offer.type) {
+      cardElements.type.textContent = window.utils.PROPERTY_TYPES[property.offer.type];
+    } else {
+      cardElements.type.textContent = '';
+    }
 
-    card.querySelector('.popup__type').textContent = PROPERTY_TYPES[property.offer.type];
+    if (property.offer.rooms || property.offer.rooms === 0 || property.offer.guests || property.offer.guests === 0) {
+      cardElements.capacity.textContent = property.offer.rooms + ' комнаты для ' + property.offer.guests + ' гостей';
+    } else {
+      cardElements.capacity.textContent = '';
+    }
 
-    card.querySelector('.popup__text--capacity').textContent = property.offer.rooms + ' комнаты для '
-      + property.offer.guests + ' гостей';
-    card.querySelector('.popup__text--time').textContent = 'Заезд после ' + property.offer.checkin
-      + ', выезд до ' + property.offer.checkout;
+    if (property.offer.checkin && property.offer.checkout) {
+      cardElements.time.textContent = 'Заезд после ' + property.offer.checkin + ', выезд до ' + property.offer.checkout;
+    } else {
+      cardElements.time.textContent = '';
+    }
 
-    features.innerHTML = '';
-    property.offer.features.forEach(function (it) {
-      var li = document.createElement('li');
-      li.className = 'popup__feature popup__feature--' + it;
-      features.appendChild(li);
-    });
+    cardElements.features.innerHTML = '';
+    if (property.offer.features) {
+      property.offer.features.forEach(function (it) {
+        var li = document.createElement('li');
+        li.className = 'popup__feature popup__feature--' + it;
+        cardElements.features.appendChild(li);
+      });
+    }
 
-    card.querySelector('.popup__description').textContent = property.offer.description;
+    assignContent(cardElements.description, property.offer.description);
 
-    var photo = photos.querySelector('img').cloneNode(true);
-    photos.innerHTML = '';
-    property.offer.photos.forEach(function (it) {
-      var newPhoto = photo.cloneNode(true);
-      newPhoto.src = it;
-      photos.appendChild(newPhoto);
-    });
+    var photo = cardElements.photos.querySelector('img').cloneNode(true);
+    cardElements.photos.innerHTML = '';
+    if (property.offer.photos) {
+      property.offer.photos.forEach(function (it) {
+        var newPhoto = photo.cloneNode(true);
+        newPhoto.src = it;
+        cardElements.photos.appendChild(newPhoto);
+      });
+    }
 
-    card.querySelector('.popup__avatar').src = property.author.avatar;
+    if (property.author.avatar) {
+      cardElements.avatar.src = property.author.avatar;
+    } else {
+      cardElements.avatar.src = '';
+    }
 
     document.querySelector('.map__filters-container').before(card);
 
-    setCardsEventListeners();
+    setCardEventListeners();
     document.addEventListener('keydown', onEscPress);
   };
 
-  var setCardsEventListeners = function () {
-    var closeButtons = document.querySelectorAll('.popup__close');
-    closeButtons.forEach(function (it) {
-      it.addEventListener('click', function () {
-        window.cards.removeOldCards();
-      });
-      it.addEventListener('keydown', function (evt) {
-        if (evt.key === window.utils.ENTER_KEY) {
-          window.cards.removeOldCards();
-        }
-      });
+  var removeActiveClass = function (array) {
+    array.forEach(function (it) {
+      it.classList.remove('map__pin--active');
+    });
+  };
+
+  var setCardEventListeners = function () {
+    var pins = getPins();
+    var closeButton = document.querySelector('.popup__close');
+    closeButton.addEventListener('click', function () {
+      window.cards.removeOldCard();
+      removeActiveClass(pins);
+    });
+    closeButton.addEventListener('keydown', function (evt) {
+      if (evt.key === window.utils.ENTER_KEY) {
+        window.cards.removeOldCard();
+        removeActiveClass(pins);
+      }
     });
   };
 
   var checkOpenedCards = function () {
-    var currentCards = document.querySelectorAll('.map__card');
+    var openedCard = document.querySelector('.map__card');
 
-    var check = false;
-
-    for (var i = 0; i < currentCards.length && check === false; i++) {
-      check = (currentCards.length !== 0);
-    }
-
-    return check;
+    return openedCard ? true : false;
   };
 
   var onEscPress = function (evt) {
     if (evt.key === window.utils.ESC_KEY) {
-      window.cards.removeOldCards();
+      window.cards.removeOldCard();
     }
   };
 
-  var onPinClicking = function (element) {
+  var onPinClicking = function (element, array) {
+    removeActiveClass(array);
+    element.classList.add('map__pin--active');
     if (checkOpenedCards()) {
-      window.cards.removeOldCards();
+      window.cards.removeOldCard();
       displayAdCard(getCorrespondingAd(window.adPins.propertiesFromServer, element));
     } else {
       displayAdCard(getCorrespondingAd(window.adPins.propertiesFromServer, element));
@@ -121,25 +147,25 @@
   window.cards = {
 
     setPinEventListeners: function () {
-      var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+      var pins = getPins();
       pins.forEach(function (it) {
         it.addEventListener('click', function () {
-          onPinClicking(it);
+          onPinClicking(it, pins);
         });
         it.addEventListener('keydown', function (evt) {
           if (evt.key === window.utils.ENTER_KEY) {
-            onPinClicking(it);
+            onPinClicking(it, pins);
           }
         });
       });
     },
 
-    removeOldCards: function () {
-      var cards = document.querySelectorAll('.map__card');
-      for (var i = 0; i < cards.length; i++) {
-        cards[i].remove();
+    removeOldCard: function () {
+      var card = document.querySelector('.map__card');
+      if (card) {
+        card.remove();
+        document.removeEventListener('keydown', onEscPress);
       }
-      document.removeEventListener('keydown', onEscPress);
     }
   };
 

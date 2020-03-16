@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var PIN_WIDTH = 50;
-  var PIN_HEIGHT = 70;
 
   var properties = new Array(5);
 
@@ -14,16 +12,15 @@
 
   var checkboxFilters = document.querySelectorAll('#housing-features input');
 
-  // var propertiesFromServer;
-
   var displayPins = function (array) {
 
     var fragment = document.createDocumentFragment();
 
     var renderPin = function (property) {
+
       var pin = pinTemplate.cloneNode(true);
 
-      pin.style = 'left: ' + (property.location.x - PIN_WIDTH / 2) + 'px; top: ' + (property.location.y - PIN_HEIGHT) + 'px;';
+      pin.style = 'left: ' + (property.location.x - window.utils.PIN_WIDTH / 2) + 'px; top: ' + (property.location.y - window.utils.PIN_HEIGHT) + 'px;';
       pin.querySelector('img').src = property.author.avatar;
       pin.querySelector('img').alt = property.offer.title;
 
@@ -40,6 +37,39 @@
 
   };
 
+  var getRandomAd = function (array) {
+    return array[Math.floor(Math.random() * array.length)];
+  };
+
+  var checkMissingOffer = function (array) {
+    var check = true;
+
+    for (var k = 0; check === true && k < array.length; k++) {
+      check = (array[k].hasOwnProperty('offer'));
+    }
+
+    return check;
+  };
+
+  var checkDuplicates = function (array) {
+    var check = true;
+
+    for (var j = 0; check === true && j < array.length; j++) {
+      check = (array.indexOf(array[j]) === j);
+    }
+
+    return check;
+  };
+
+  var addIndices = function (array) {
+    var propertyIndex = 0;
+
+    array.forEach(function (it) {
+      it.index = propertyIndex;
+      propertyIndex++;
+    });
+  };
+
   window.adPins = {
 
     propertiesFromServer: [],
@@ -48,39 +78,31 @@
 
       window.adPins.propertiesFromServer = data;
 
-      var propertyIndex = 0;
-
-      window.adPins.propertiesFromServer.forEach(function (it) {
-        it.index = propertyIndex;
-        propertyIndex++;
-      });
-
-      var getRandomAd = function (array) {
-        return array[Math.floor(Math.random() * array.length)];
-      };
+      addIndices(window.adPins.propertiesFromServer);
 
       for (var i = 0; i < properties.length; i++) {
         properties[i] = getRandomAd(window.adPins.propertiesFromServer);
       }
 
-      var checkDuplicates = function (array) {
+      var propertiesWithOffer;
 
-        var check = true;
+      while (checkMissingOffer(properties) === false) {
+        propertiesWithOffer = properties.filter(function (it, l) {
+          return properties[l].hasOwnProperty('offer');
+        });
 
-        for (var j = 0; check === true && j < array.length; j++) {
-          check = (array.indexOf(array[j]) === j);
+        while (propertiesWithOffer.length < properties.length) {
+          propertiesWithOffer.push(getRandomAd(window.adPins.propertiesFromServer));
         }
 
-        return check;
-
-      };
+        properties = uniqueProperties;
+      }
 
       var uniqueProperties;
 
       while (checkDuplicates(properties) === false) {
-
-        uniqueProperties = properties.filter(function (it, k) {
-          return properties.indexOf(it) === k;
+        uniqueProperties = properties.filter(function (it, m) {
+          return properties.indexOf(it) === m;
         });
 
         while (uniqueProperties.length < properties.length) {
@@ -88,7 +110,6 @@
         }
 
         properties = uniqueProperties;
-
       }
 
       displayPins(properties);
@@ -124,7 +145,7 @@
     window.adPins.removeOldPins();
     displayPins(filteredProperties);
 
-    window.cards.removeOldCards();
+    window.cards.removeOldCard();
 
     window.cards.setPinEventListeners();
   };

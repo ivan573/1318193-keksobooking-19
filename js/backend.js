@@ -43,10 +43,12 @@
         if (xhr.status === 200) {
           onLoad(xhr.response);
         } else {
-          onError('Ошибка ' + xhr.status + ': ' + getError(window.statusCodeList, xhr.status));
+          onError();
         }
 
       });
+
+      xhr.addEventListener('error', onError);
 
       xhr.open('POST', URL);
       xhr.send(data);
