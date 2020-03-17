@@ -30,7 +30,7 @@
       palace: 'Дворец'
     },
 
-    PROPERTY_MINIMUM_PRICE: {
+    PROPERTY_MINIMUM_PRICES: {
       bungalo: '0',
       flat: '1000',
       house: '5000',

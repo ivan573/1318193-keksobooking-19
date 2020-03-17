@@ -13,7 +13,7 @@
   };
 
   window.setMinimumPrice = function (value) {
-    setPriceAttribute(window.utils.PROPERTY_MINIMUM_PRICE[value]);
+    setPriceAttribute(window.utils.PROPERTY_MINIMUM_PRICES[value]);
   };
 
   // setting the price for the initial property type
