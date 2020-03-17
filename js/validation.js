@@ -2,49 +2,42 @@
 
 (function () {
 
-  var propertyTypeField = document.querySelector('#type');
+  var propertyTypeFieldElement = document.querySelector('#type');
 
-  var priceField = document.querySelector('#price');
-
-  var propertyMinimumPrice = {
-    bungalo: '0',
-    flat: '1000',
-    house: '5000',
-    palace: '10000'
-  };
+  var priceFieldElement = document.querySelector('#price');
 
   // the function sets minimum prices and placeholders for the price field
   var setPriceAttribute = function (price) {
-    priceField.setAttribute('min', price);
-    priceField.setAttribute('placeholder', price);
+    priceFieldElement.setAttribute('min', price);
+    priceFieldElement.setAttribute('placeholder', price);
   };
 
-  var setMinimumPrice = function (value) {
-    setPriceAttribute(propertyMinimumPrice[value]);
+  window.setMinimumPrice = function (value) {
+    setPriceAttribute(window.utils.PROPERTY_MINIMUM_PRICE[value]);
   };
 
   // setting the price for the initial property type
-  setMinimumPrice(document.querySelector('#type').value);
+  window.setMinimumPrice(document.querySelector('#type').value);
 
   // setting event listeners for property type change
-  propertyTypeField.addEventListener('change', function () {
-    setMinimumPrice(propertyTypeField.value);
+  propertyTypeFieldElement.addEventListener('change', function () {
+    window.setMinimumPrice(propertyTypeFieldElement.value);
   });
 
-  var checkInField = document.querySelector('#timein');
-  var checkOutField = document.querySelector('#timeout');
+  var checkInFieldElement = document.querySelector('#timein');
+  var checkOutFieldElement = document.querySelector('#timeout');
 
   // two event listeners, which adjust the check-in and check-out time whenever one is changed
-  checkInField.addEventListener('change', function () {
-    checkOutField.value = checkInField.value;
+  checkInFieldElement.addEventListener('change', function () {
+    checkOutFieldElement.value = checkInFieldElement.value;
   });
 
-  checkOutField.addEventListener('change', function () {
-    checkInField.value = checkOutField.value;
+  checkOutFieldElement.addEventListener('change', function () {
+    checkInFieldElement.value = checkOutFieldElement.value;
   });
 
-  var roomsNumberField = document.querySelector('#room_number');
-  var guestsNumberField = document.querySelector('#capacity');
+  var roomsNumberFieldElement = document.querySelector('#room_number');
+  var guestsNumberFieldElement = document.querySelector('#capacity');
 
   // the function sets the capacity depending on the number of guests
   var setCapacity = function (rooms, guests) {
@@ -58,12 +51,12 @@
   };
 
   // setting event listeners for room number and guest number change
-  roomsNumberField.addEventListener('change', function () {
-    setCapacity(roomsNumberField, guestsNumberField);
+  roomsNumberFieldElement.addEventListener('change', function () {
+    setCapacity(roomsNumberFieldElement, guestsNumberFieldElement);
   });
 
-  guestsNumberField.addEventListener('change', function () {
-    setCapacity(roomsNumberField, guestsNumberField);
+  guestsNumberFieldElement.addEventListener('change', function () {
+    setCapacity(roomsNumberFieldElement, guestsNumberFieldElement);
   });
 
 })();

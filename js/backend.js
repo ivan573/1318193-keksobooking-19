@@ -4,7 +4,6 @@
   window.backend = {
     load: function (onLoad, onError) {
       var xhr = new XMLHttpRequest();
-      var URL = 'https://js.dump.academy/keksobooking/data';
 
       xhr.addEventListener('load', function () {
         if (xhr.status === 200) {
@@ -28,14 +27,13 @@
 
       xhr.timeout = 10000;
 
-      xhr.open('GET', URL);
+      xhr.open('GET', window.utils.URL.load);
       xhr.send();
 
     },
 
     save: function (data, onLoad, onError) {
       var xhr = new XMLHttpRequest();
-      var URL = 'https://js.dump.academy/keksobooking';
 
       xhr.responseType = 'json';
 
@@ -50,7 +48,7 @@
 
       xhr.addEventListener('error', onError);
 
-      xhr.open('POST', URL);
+      xhr.open('POST', window.utils.URL.save);
       xhr.send(data);
     }
   };

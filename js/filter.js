@@ -25,19 +25,18 @@
   };
 
   // the features state is sepparate because it is count differently
-  var getHousingFeatures = function () {
+  var getHousingFeatureElements = function () {
     return document.querySelectorAll('#housing-features input:checked');
   };
 
   // this function compares (counts) the used features filters and the features that a property has
   var compareFeatures = function (currentFeatures) {
     var comparisonRank = 0;
-    getHousingFeatures().forEach(function (it) {
-      var check = false;
-      for (var i = 0; i < currentFeatures.length && check === false; i++) {
-        check = (currentFeatures[i] === it.value);
-      }
-      if (check) {
+    getHousingFeatureElements().forEach(function (it) {
+      var check = function (element) {
+        return element === it.value;
+      };
+      if (currentFeatures.some(check)) {
         comparisonRank++;
       }
     });
@@ -59,17 +58,18 @@
     // price
     switch (getData.getHousingPrice()) {
       case ('middle'):
-        if (property.offer.price >= 10000 && property.offer.price < 50000) {
+        if (property.offer.price >= window.utils.PROPERTY_PRICE_RANGE.low
+          && property.offer.price < window.utils.PROPERTY_PRICE_RANGE.high) {
           rank++;
         }
         break;
       case ('low'):
-        if (property.offer.price < 10000) {
+        if (property.offer.price < window.utils.PROPERTY_PRICE_RANGE.low) {
           rank++;
         }
         break;
       case ('high'):
-        if (property.offer.price >= 50000) {
+        if (property.offer.price >= window.utils.PROPERTY_PRICE_RANGE.high) {
           rank++;
         }
         break;
@@ -109,7 +109,7 @@
       }
     }
 
-    filters += getHousingFeatures().length;
+    filters += getHousingFeatureElements().length;
     return filters;
   };
 

@@ -5,7 +5,7 @@
   var bottomBorder = document.querySelector('.map__pins').offsetHeight - window.utils.MAIN_PIN_HEIGHT;
   var rightBorder = document.querySelector('.map__pins').offsetWidth - window.utils.MAIN_PIN_WIDTH;
 
-  window.activation.mainPin.addEventListener('mousedown', function (evt) {
+  window.activation.mainPinElement.addEventListener('mousedown', function (evt) {
 
     var startCoords = {
       x: evt.clientX,
@@ -24,21 +24,21 @@
         y: moveEvt.clientY
       };
 
-      window.activation.mainPin.style.top = (window.activation.mainPin.offsetTop - shift.y) + 'px';
-      window.activation.mainPin.style.left = (window.activation.mainPin.offsetLeft - shift.x) + 'px';
+      window.activation.mainPinElement.style.top = (window.activation.mainPinElement.offsetTop - shift.y) + 'px';
+      window.activation.mainPinElement.style.left = (window.activation.mainPinElement.offsetLeft - shift.x) + 'px';
 
-      if (window.activation.mainPin.offsetLeft < 0) {
-        window.activation.mainPin.style.left = 0 + 'px';
+      if (window.activation.mainPinElement.offsetLeft < 0) {
+        window.activation.mainPinElement.style.left = 0 + 'px';
       }
-      if (window.activation.mainPin.offsetLeft > rightBorder) {
-        window.activation.mainPin.style.left = rightBorder + 'px';
+      if (window.activation.mainPinElement.offsetLeft > rightBorder) {
+        window.activation.mainPinElement.style.left = rightBorder + 'px';
       }
 
-      if (window.activation.mainPin.offsetTop < 0) {
-        window.activation.mainPin.style.top = 0 + 'px';
+      if (window.activation.mainPinElement.offsetTop < 0) {
+        window.activation.mainPinElement.style.top = 0 + 'px';
       }
-      if (window.activation.mainPin.offsetTop > bottomBorder) {
-        window.activation.mainPin.style.top = bottomBorder + 'px';
+      if (window.activation.mainPinElement.offsetTop > bottomBorder) {
+        window.activation.mainPinElement.style.top = bottomBorder + 'px';
       }
 
     };

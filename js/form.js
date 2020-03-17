@@ -2,19 +2,25 @@
 
 (function () {
 
-  var adForm = document.querySelector('form.ad-form');
+  var adFormElement = document.querySelector('form.ad-form');
 
-  var resetButton = document.querySelector('.ad-form__reset');
+  var resetButtonElement = document.querySelector('.ad-form__reset');
 
-  var avatarChooser = document.querySelector('input.ad-form-header__input');
-  var avatarPreview = document.querySelector('.ad-form-header__preview img');
+  var avatarChooserElement = document.querySelector('input.ad-form-header__input');
+  var avatarPreviewElement = document.querySelector('.ad-form-header__preview img');
 
-  var propertyPhotoChooser = document.querySelector('.ad-form__upload input');
-  var propertyPhotoPreview = document.querySelector('.ad-form__photo img');
+  var propertyPhotoChooserElement = document.querySelector('.ad-form__upload input');
+  var propertyPhotoPreviewElement = document.querySelector('.ad-form__photo img');
 
   // the function resets the form
   var refreshForm = function () {
-    adForm.reset();
+    adFormElement.reset();
+
+    avatarPreviewElement.src = '';
+    propertyPhotoPreviewElement.src = '';
+
+    window.setMinimumPrice(document.querySelector('#type').value);
+
     setTimeout(window.updateAddress, 5); // a timeout is needed because otherwise the address box stays empty
   };
 
@@ -24,11 +30,11 @@
     window.activation.deactivatePage();
     refreshForm();
 
-    var successMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+    var successMessageElementClone = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
 
     // function for user clicking of the screen or pressing escape. it removes the message and the event listeners.
     var onAction = function () {
-      successMessage.remove();
+      successMessageElementClone.remove();
       document.removeEventListener('click', function () {
         onAction();
       });
@@ -42,7 +48,7 @@
     };
 
     // displaying the message
-    document.querySelector('main').appendChild(successMessage);
+    document.querySelector('main').appendChild(successMessageElementClone);
 
     // adding the message eventlisteners
     document.addEventListener('click', function () {
@@ -53,17 +59,17 @@
 
   // same as previous but with the upload failure message
   var onError = function () {
-    var errorMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+    var errorMessageElementClone = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 
-    var closeButton = errorMessage.querySelector('button');
+    var closeButtonElement = errorMessageElementClone.querySelector('button');
 
     var onAction = function () {
-      errorMessage.remove();
+      errorMessageElementClone.remove();
       document.removeEventListener('click', function () {
         onAction();
       });
       document.revomeEventListener('keydown', onEscPress);
-      closeButton.removeEventListener('keydown', onEnterPress);
+      closeButtonElement.removeEventListener('keydown', onEnterPress);
     };
 
     var onEscPress = function (evt) {
@@ -78,26 +84,26 @@
       }
     };
 
-    document.querySelector('main').appendChild(errorMessage);
+    document.querySelector('main').appendChild(errorMessageElementClone);
 
     document.addEventListener('click', function () {
       onAction();
     });
     document.addEventListener('keydown', onEscPress);
-    closeButton.addEventListener('click', function () {
+    closeButtonElement.addEventListener('click', function () {
       onAction();
     });
-    closeButton.addEventListener('keydown', onEnterPress);
+    closeButtonElement.addEventListener('keydown', onEnterPress);
   };
 
   // adding event listener to the submit button
-  adForm.addEventListener('submit', function (evt) {
+  adFormElement.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(adForm), onSuccess, onError);
+    window.backend.save(new FormData(adFormElement), onSuccess, onError);
   });
 
   // event listener for the refresh button
-  resetButton.addEventListener('click', function () {
+  resetButtonElement.addEventListener('click', function () {
     window.activation.deactivatePage();
     refreshForm();
   });
@@ -125,7 +131,7 @@
     });
   };
 
-  setChooserEventListeners(avatarChooser, avatarPreview);
-  setChooserEventListeners(propertyPhotoChooser, propertyPhotoPreview);
+  setChooserEventListeners(avatarChooserElement, avatarPreviewElement);
+  setChooserEventListeners(propertyPhotoChooserElement, propertyPhotoPreviewElement);
 
 })();
