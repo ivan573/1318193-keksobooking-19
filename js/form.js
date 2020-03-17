@@ -18,6 +18,7 @@
 
     avatarPreviewElement.src = '';
     propertyPhotoPreviewElement.src = '';
+    propertyPhotoPreviewElement.setAttribute('hidden', 'hidden');
 
     window.setMinimumPrice(document.querySelector('#type').value);
 
@@ -123,6 +124,7 @@
 
         reader.addEventListener('load', function () {
 
+          preview.removeAttribute('hidden');
           preview.src = reader.result;
         });
 
